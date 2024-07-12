@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 });
 app.get("/users", async (req, res) => {
     let collection = await db.collection("users");
-    let results = await collection.find({}).limit(5).toArray();
+    let results = await collection.find({}).limit(4).toArray();
     res.send(results).status(200);
 });
 
