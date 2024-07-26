@@ -16,7 +16,7 @@ export const UserControlPage = () => {
     return (
         <Stack alignItems={"center"}>
             <Typography variant="h5" sx={{ marginBottom: "30px" }}>
-                Users list
+                Users list list 2
             </Typography>
             <UserList users={users} />
         </Stack>
