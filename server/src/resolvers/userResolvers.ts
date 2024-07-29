@@ -40,7 +40,7 @@ export const userResolvers = {
             return user;
         },
         users: async (parent, args) => {
-            let results = await User.find({}).limit(3).exec();
+            let results = await User.find({}).exec();
             return results;
         },
     },

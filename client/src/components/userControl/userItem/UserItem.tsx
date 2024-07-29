@@ -1,8 +1,9 @@
-import { Paper, Stack, Typography } from "@mui/material";
-import { ButtonIconTooltip } from "components/buttonIconTooltip/ButtonIconTooltip";
-import { User } from "models/User";
+import { Paper, Stack, Theme, Typography } from "@mui/material";
 import PersonPinTwoToneIcon from "@mui/icons-material/PersonPinTwoTone";
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
+
+import { ButtonIconTooltip } from "components/buttonIconTooltip/ButtonIconTooltip";
+import { User } from "models/User";
 
 interface Props {
     user: User;
@@ -29,7 +30,12 @@ export const UserItem = ({ user }: Props) => {
                         <PersonPinTwoToneIcon />
                     </ButtonIconTooltip>
                     <ButtonIconTooltip>
-                        <DeleteForeverTwoToneIcon />
+                        <DeleteForeverTwoToneIcon
+                            sx={{
+                                color: (theme: Theme) =>
+                                    theme.palette.colors.red,
+                            }}
+                        />
                     </ButtonIconTooltip>
                 </Stack>
             </Stack>
