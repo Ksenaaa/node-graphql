@@ -15,6 +15,23 @@ import { commentsResolvers, commentTypeDefs } from "./resolvers/commentResolvers
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const corsOptions = {
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
+    credentials: true,
+    maxAge: 600,
+    origin: [
+        'http://localhost:3000',
+        'https://studio.apollographql.com'
+    ],
+    allowedHeaders: [
+        'Accept',
+        'Authorization',
+        'Content-Type',
+        'X-Requested-With',
+        'apollo-require-preflight',
+    ],
+}
+
 const httpServer = http.createServer(app);
 
 const server = new ApolloServer({
@@ -23,25 +40,17 @@ const server = new ApolloServer({
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-async function startServer() {
-    try {
-        await connectDB();
+app.use(cors<cors.CorsRequest>(corsOptions))
+app.use(express.json())
 
-        await server.start();
+await connectDB();
+await server.start();
 
-        app.use(
-            "/graphql",
-            cors(),
-            express.json(),
-            expressMiddleware(server, {})
-        );
+app.use(
+    "/graphql",
+    expressMiddleware(server)
+);
 
-        httpServer.listen(PORT, () => {
-            console.log(`🚀 Server ready at http://localhost:${PORT}`);
-        });
-    } catch (error) {
-        console.error('Failed to start server:', error);
-    }
-}
-
-startServer();
+httpServer.listen(PORT, () => {
+    console.log(`🚀 Server ready at http://localhost:${PORT}`);
+});
