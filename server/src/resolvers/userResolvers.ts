@@ -3,27 +3,28 @@ import User from "../models/userSchema.ts";
 
 export const userTypeDefs = `
     input CreateUser {
-        name: String
-        email: String
-        password: String
+        name: String!
+        email: String!
+        password: String!
     }
 
     input UpdateUser {
-        name: String
-        email: String
+        name: String!
+        email: String!
+        password: String!
     }
 
     type User {
         id: ID!
-        name: String
-        email: String
-        password: String,
-        comments: [Comment]
+        name: String!
+        email: String!
+        password: String!
+        comments: [Comment!]!
     }    
 
     type Query {
         userById(id: ID!): User
-        users: [User]
+        users: [User!]!
     }
 
     type Mutation {
