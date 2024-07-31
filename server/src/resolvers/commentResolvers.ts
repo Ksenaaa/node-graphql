@@ -3,15 +3,15 @@ import User from "../models/userSchema.ts";
 
 export const commentTypeDefs = `
     type Query {
-        comments: [Comment]
+        comments: [Comment!]!
     }
     type Comment {
         id: ID!
-        email: String
-        movie_id: ID
-        text: String
-        date: String,
-        user: User
+        email: String!
+        movie_id: ID!
+        text: String!
+        date: String!
+        user: User!
     }
 `;
 
@@ -26,7 +26,6 @@ export const commentsResolvers = {
         id: (obj) => obj._id || obj.id,
         user: async ({ email }, args) => {
             const result = await User.findOne({ email });
-            console.log(result);
             return result;
         },
     },
