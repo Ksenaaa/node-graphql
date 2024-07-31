@@ -1,7 +1,9 @@
+import gql from "graphql-tag";
+
 import Comment from "../models/commentSchema.ts";
 import User from "../models/userSchema.ts";
 
-export const commentTypeDefs = `
+export const commentTypeDefs = gql`
     type Query {
         comments: [Comment!]!
     }

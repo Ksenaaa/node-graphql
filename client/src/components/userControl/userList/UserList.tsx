@@ -4,17 +4,17 @@ import { Paper, Stack, Theme } from "@mui/material";
 
 import { User } from "models/User";
 import { LoaderInBox } from "components/loader/LoaderInBox";
+import { ErrorMessage } from "components/errorMessage/ErrorMessage";
 import { useToggle } from "utils/helpers/toggleHook";
 import { UserItem } from "../userItem/UserItem";
 import { ControlButtons } from "../controlButtons/ControlButtons";
 import { GET_USERS } from "../graphql/users.query";
 import { UserForm } from "../userForm/UserForm";
-import { GetUsersQuery } from "__generated__/graphql";
 
 export const UserList = () => {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-    const { loading, error, data: users } = useQuery<GetUsersQuery>(GET_USERS);
+    const { loading, error, data: users } = useQuery(GET_USERS);
 
     const { isOpen: isOpenModalUser, onToggle: onToggleModalUser } =
         useToggle();
@@ -33,7 +33,7 @@ export const UserList = () => {
     );
 
     if (loading) return <LoaderInBox />;
-    if (error) return <p>Error : {error.message}</p>;
+    if (error) return <ErrorMessage errorMessage={error.message} />;
 
     return (
         <>
