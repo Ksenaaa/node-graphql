@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
+import { gql } from "__generated__";
 
-export const GET_USERS = gql`
+export const GET_USERS = gql(`
     query GetUsers {
         users {
             id
@@ -9,4 +9,4 @@ export const GET_USERS = gql`
             password
         }
     }
-`;
+`);

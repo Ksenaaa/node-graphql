@@ -1,7 +1,9 @@
+import gql from "graphql-tag";
+
 import Comment from "../models/commentSchema.ts";
 import User from "../models/userSchema.ts";
 
-export const userTypeDefs = `
+export const userTypeDefs = gql`
     input CreateUser {
         name: String!
         email: String!
@@ -38,38 +40,55 @@ export const userResolvers = {
     Query: {
         userById: async (parent, { id }) => {
             const user = await User.findById({ _id: id }).exec();
+
             return user;
         },
         users: async (parent, args) => {
-            let results = await User.find({}).exec();
+            let results = await User.find().exec();
+
             return results;
         },
     },
     Mutation: {
         addUser: async (parent, { dataUser }) => {
             const newUser = await User.create(dataUser)
+
             return newUser
         },
         updateUser: async (parent, { id, updatedDataUser }) => {
-            const update = await User.updateOne(
-                { _id: id },
-                { $set: updatedDataUser }
-            )
+            try {
+                const result = await User.findById({ _id: id })
 
-            if (update.modifiedCount) {
+                if (!result) {
+                    throw new Error('User is not exist!')
+                }
+
+                await User.updateOne(
+                    { _id: id },
+                    { $set: updatedDataUser }
+                )
+
                 const updatedUser = await User.findById({ _id: id }).exec();
+
                 return updatedUser
+            } catch (error) {
+                return error
             }
-            return false
         },
         deleteUser: async (parent, { id }) => {
-            const result = await User.deleteOne({ _id: id })
+            try {
+                const result = await User.findById({ _id: id })
 
-            if (result.deletedCount) {
+                if (!result) {
+                    throw new Error('User is not exist!')
+                }
+
+                await User.deleteOne({ _id: id })
+
                 return true
+            } catch (error) {
+                return error
             }
-
-            return false
         }
     },
     User: {

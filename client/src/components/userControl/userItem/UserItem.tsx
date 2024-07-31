@@ -6,11 +6,12 @@ import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
 
 import { ButtonIconTooltip } from "components/buttonIconTooltip/ButtonIconTooltip";
 import { LoaderInBox } from "components/loader/LoaderInBox";
+import { ErrorMessage } from "components/errorMessage/ErrorMessage";
 import { Modal } from "components/modal/Modal";
 import { User } from "models/User";
 import { useToggle } from "utils/helpers/toggleHook";
 import { DELETE_USER } from "../graphql/user.mutation";
-import { DeleteUserMutation } from "__generated__/graphql";
+import { GET_USERS } from "../graphql/users.query";
 
 interface Props {
     user: User;
@@ -18,8 +19,10 @@ interface Props {
 }
 
 export const UserItem = memo(({ user, onChange }: Props) => {
-    const [deleteUser, { loading }] =
-        useMutation<DeleteUserMutation>(DELETE_USER);
+    const [deleteUser, { loading, error }] = useMutation(DELETE_USER, {
+        errorPolicy: "all",
+        refetchQueries: [GET_USERS, "GetUsers"],
+    });
 
     const {
         isOpen: isOpenModalConfirmationDelete,
@@ -49,11 +52,13 @@ export const UserItem = memo(({ user, onChange }: Props) => {
                             {user.name}
                         </Typography>
                         <Typography variant="body2">{user.email}</Typography>
+
+                        {error && <ErrorMessage errorMessage={error.message} />}
                     </Stack>
 
                     <Stack direction={"row"} spacing={3} alignItems={"center"}>
                         <ButtonIconTooltip onClick={handleChangeUser}>
-                            <PersonPinTwoToneIcon />
+                            <PersonPinTwoToneIcon sx={{ fontSize: "30px" }} />
                         </ButtonIconTooltip>
                         <ButtonIconTooltip
                             onClick={onToggleModalConfirmationDelete}
@@ -63,6 +68,7 @@ export const UserItem = memo(({ user, onChange }: Props) => {
                             ) : (
                                 <DeleteForeverTwoToneIcon
                                     sx={{
+                                        fontSize: "30px",
                                         color: (theme: Theme) =>
                                             theme.palette.colors.red,
                                     }}

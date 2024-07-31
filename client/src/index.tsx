@@ -8,6 +8,7 @@ import "./index.css";
 const client = new ApolloClient({
     uri: process.env.REACT_APP_BASE_URL ?? "",
     cache: new InMemoryCache(),
+    connectToDevTools: true,
 });
 
 const root = ReactDOM.createRoot(

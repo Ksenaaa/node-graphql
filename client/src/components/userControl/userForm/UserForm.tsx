@@ -9,12 +9,7 @@ import { User } from "models/User";
 import { UserSchema } from "./UserSchema";
 import { defaultUserForm } from "./defaultUserForm";
 import { CREATE_USER, UPDATE_USER } from "../graphql/user.mutation";
-import {
-    CreateUserMutation,
-    CreateUserMutationVariables,
-    UpdateUserMutation,
-    UpdateUserMutationVariables,
-} from "__generated__/graphql";
+import { GET_USERS } from "../graphql/users.query";
 
 interface Props {
     selectedUser: User | null;
@@ -36,9 +31,13 @@ export const UserForm = ({
         resolver: zodResolver(UserSchema),
     });
 
-    const [updateUser] = useMutation<UpdateUserMutation>(UPDATE_USER);
+    const [updateUser] = useMutation(UPDATE_USER, {
+        errorPolicy: "all",
+    });
 
-    const [addUser] = useMutation<CreateUserMutation>(CREATE_USER);
+    const [addUser] = useMutation(CREATE_USER, {
+        refetchQueries: [GET_USERS, "GetUsers"],
+    });
 
     const handleSaveChangesUser = handleSubmit((data) => {
         if (selectedUser) {
@@ -46,7 +45,7 @@ export const UserForm = ({
                 variables: {
                     updateUserId: selectedUser.id,
                     updatedDataUser: data,
-                } as UpdateUserMutationVariables,
+                },
             });
 
             onCloseModalUser();
@@ -54,9 +53,7 @@ export const UserForm = ({
         }
 
         addUser({
-            variables: {
-                dataUser: data,
-            } as CreateUserMutationVariables,
+            variables: { dataUser: data },
         });
 
         onCloseModalUser();

@@ -1,12 +1,12 @@
-import { gql } from '@apollo/client';
+import { gql } from "__generated__/gql";
 
-export const DELETE_USER = gql`
+export const DELETE_USER = gql(`
     mutation DeleteUser($userId: ID!) {
         deleteUser(id: $userId)
     }
-`;
+`);
 
-export const CREATE_USER = gql`
+export const CREATE_USER = gql(`
     mutation CreateUser($dataUser: CreateUser) {
         addUser(dataUser: $dataUser) {
             id
@@ -15,9 +15,9 @@ export const CREATE_USER = gql`
             password
         }
     }
-`;
+`);
 
-export const UPDATE_USER = gql`
+export const UPDATE_USER = gql(`
     mutation UpdateUser($updateUserId: ID!, $updatedDataUser: UpdateUser!) {
         updateUser(id: $updateUserId, updatedDataUser: $updatedDataUser) {
             id
@@ -26,4 +26,4 @@ export const UPDATE_USER = gql`
             password
         }
     }
-`;
+`);
