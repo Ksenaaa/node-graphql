@@ -8,10 +8,10 @@ import { ButtonIconTooltip } from "components/buttonIconTooltip/ButtonIconToolti
 import { LoaderInBox } from "components/loader/LoaderInBox";
 import { ErrorMessage } from "components/errorMessage/ErrorMessage";
 import { Modal } from "components/modal/Modal";
-import { User } from "models/User";
 import { useToggle } from "utils/helpers/toggleHook";
 import { DELETE_USER } from "../graphql/user.mutation";
 import { GET_USERS } from "../graphql/users.query";
+import { User } from "__generated__/graphql";
 
 interface Props {
     user: User;

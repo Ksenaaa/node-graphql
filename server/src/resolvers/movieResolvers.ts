@@ -116,7 +116,7 @@ export const movieResolvers = {
             return movie;
         },
         movies: async (parent, args) => {
-            let results = await Movie.find().exec();
+            let results = await Movie.find().limit(175).exec();
 
             return results;
         },

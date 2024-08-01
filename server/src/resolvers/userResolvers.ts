@@ -21,7 +21,7 @@ export const userTypeDefs = gql`
         name: String!
         email: String!
         password: String!
-        comments: [Comment!]!
+        comments: [Comment!]
     }    
 
     type Query {

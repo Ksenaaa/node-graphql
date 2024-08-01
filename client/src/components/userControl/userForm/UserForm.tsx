@@ -5,11 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { CustomInput } from "components/customInput/CustomInput";
 import { Modal } from "components/modal/Modal";
-import { User } from "models/User";
 import { UserSchema } from "./UserSchema";
 import { defaultUserForm } from "./defaultUserForm";
 import { CREATE_USER, UPDATE_USER } from "../graphql/user.mutation";
 import { GET_USERS } from "../graphql/users.query";
+import { User } from "__generated__/graphql";
 
 interface Props {
     selectedUser: User | null;
