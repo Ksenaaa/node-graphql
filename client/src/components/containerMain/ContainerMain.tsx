@@ -12,7 +12,7 @@ export const ContainerMain = ({ children }: PropsWithChildren) => {
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "column",
-                padding: "65px",
+                padding: "94px 65px 30px",
             }}
         >
             {children}
