@@ -7,6 +7,7 @@ export const commentTypeDefs = gql`
     type Query {
         comments: [Comment!]!
     }
+        
     type Comment {
         id: ID!
         email: String!
