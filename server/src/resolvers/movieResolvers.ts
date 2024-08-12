@@ -97,7 +97,7 @@ export const movieTypeDefs = gql`
     }    
 
     type Query {
-        movieById(id: ID!): Movie
+        movieById(id: ID!): Movie!
         movies: [Movie!]!
     }
 
