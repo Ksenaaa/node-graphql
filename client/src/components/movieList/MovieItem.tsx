@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { NavigateFunction } from "react-router-dom";
 import {
     Card,
     CardActionArea,
@@ -13,12 +14,17 @@ import { Movie } from "__generated__/graphql";
 
 interface Props {
     movie: Movie;
+    navigate: NavigateFunction;
 }
 
-export const MovieItem = memo(({ movie }: Props) => {
+export const MovieItem = memo(({ movie, navigate }: Props) => {
+    const handleNavigationToItem = () => {
+        navigate(movie.id);
+    };
+
     return (
         <Card sx={{ width: 350 }}>
-            <CardActionArea>
+            <CardActionArea onClick={handleNavigationToItem}>
                 <CardMedia
                     component="img"
                     height="450"
@@ -26,6 +32,7 @@ export const MovieItem = memo(({ movie }: Props) => {
                     image={movie.poster ?? noImg}
                     sx={{ objectFit: "contain" }}
                     alt={movie.title || ""}
+                    loading="lazy"
                 />
                 <CardContent sx={{ padding: "12px" }}>
                     <Typography
@@ -34,9 +41,7 @@ export const MovieItem = memo(({ movie }: Props) => {
                             color: (theme: Theme) => theme.palette.colors.grey,
                         }}
                     >
-                        {`${movie.year} / ${movie.countries?.map(
-                            (country) => " " + country
-                        )}`}
+                        {`${movie.year} / ${movie.countries?.join(", ")}`}
                     </Typography>
                     <Typography
                         variant="body1"

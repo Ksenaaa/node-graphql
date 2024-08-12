@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Paper, Stack, Theme } from "@mui/material";
 
@@ -7,6 +8,8 @@ import { GET_MOVIE_CARDS } from "./graphql/movies.query";
 import { MovieItem } from "./MovieItem";
 
 export const MovieList = () => {
+    const navigate = useNavigate();
+
     const { loading, error, data: movies } = useQuery(GET_MOVIE_CARDS);
 
     if (loading) return <LoaderInBox />;
@@ -32,7 +35,11 @@ export const MovieList = () => {
                     }}
                 >
                     {movies?.movies.map((movie) => (
-                        <MovieItem key={movie?.id} movie={movie} />
+                        <MovieItem
+                            key={movie?.id}
+                            movie={movie}
+                            navigate={navigate}
+                        />
                     ))}
                 </Stack>
             </Paper>

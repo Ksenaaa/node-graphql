@@ -6,6 +6,7 @@ import { NotFoundPage } from "pages/NotFoundPage";
 import { ProfilePage } from "pages/ProfilePage";
 import { UserControlPage } from "pages/UserControlPage";
 import { RouterDirection } from "models/routerDirection";
+import { MovieInfoPage } from "pages/MovieInfoPage";
 
 export const RouterApp = () => {
     return (
@@ -16,6 +17,10 @@ export const RouterApp = () => {
                     element={<Navigate to={RouterDirection.MOVIES} />}
                 />
                 <Route path={RouterDirection.MOVIES} element={<MoviesPage />} />
+                <Route
+                    path={`${RouterDirection.MOVIES}/:id`}
+                    element={<MovieInfoPage />}
+                />
                 <Route
                     path={RouterDirection.USERS_CONTROL}
                     element={<UserControlPage />}

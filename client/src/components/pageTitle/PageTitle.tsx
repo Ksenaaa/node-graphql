@@ -6,7 +6,7 @@ interface Props {
 
 export const PageTitle = ({ title }: Props) => {
     return (
-        <Typography variant="h3" sx={{ mb: 5 }}>
+        <Typography variant="h3" sx={{ mb: 5, textAlign: "center" }}>
             {title}
         </Typography>
     );
