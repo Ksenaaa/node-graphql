@@ -19,22 +19,22 @@ export const titleDescription: DescriptionMovie[] = [
     {
         id: 'countries',
         title: 'Country:',
-        format: (value) => value.join(', ')
+        format: (value) => value?.join(', ')
     },
     {
         id: 'directors',
         title: 'Director:',
-        format: (value) => value.join(', ')
+        format: (value) => value?.join(', ')
     },
     {
         id: 'genres',
         title: 'Genre:',
-        format: (value) => value.join(', ')
+        format: (value) => value?.join(', ')
     },
     {
         id: 'languages',
         title: 'Language:',
-        format: (value) => value.join(', ')
+        format: (value) => value?.join(', ')
     },
     {
         id: 'runtime',
@@ -43,6 +43,6 @@ export const titleDescription: DescriptionMovie[] = [
     {
         id: 'cast',
         title: 'Cast:',
-        format: (value) => value.join(', ')
+        format: (value) => value?.join(', ')
     },
 ]
