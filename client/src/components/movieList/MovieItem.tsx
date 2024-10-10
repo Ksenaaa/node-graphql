@@ -30,7 +30,7 @@ export const MovieItem = memo(({ movie, navigate }: Props) => {
                     height="450"
                     width={"100%"}
                     image={movie.poster ?? noImg}
-                    sx={{ objectFit: "contain" }}
+                    sx={{ objectFit: "contain", padding: "12px" }}
                     alt={movie.title || ""}
                     loading="lazy"
                 />
