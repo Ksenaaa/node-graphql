@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
-import Comment from "../models/commentSchema.ts";
-import User from "../models/userSchema.ts";
+import Comment from "../models/commentSchema";
+import User from "../models/userSchema";
 
 export const userTypeDefs = gql`
     input CreateUser {

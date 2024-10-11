@@ -8,11 +8,11 @@ import { buildSubgraphSchema } from "@apollo/subgraph";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
-import connectDB from "./db/connection.ts";
-import { userResolvers, userTypeDefs } from "./resolvers/userResolvers.ts";
-import { commentsResolvers, commentTypeDefs } from "./resolvers/commentResolvers.ts";
-import { movieResolvers, movieTypeDefs } from "./resolvers/movieResolvers.ts";
-import { dateScalarResolvers, dateScalarTypeDefs } from "./resolvers/dateScalarResolvers.ts";
+import connectDB from "./db/connection";
+import { userResolvers, userTypeDefs } from "./resolvers/userResolvers";
+import { commentsResolvers, commentTypeDefs } from "./resolvers/commentResolvers";
+import { movieResolvers, movieTypeDefs } from "./resolvers/movieResolvers";
+import { dateScalarResolvers, dateScalarTypeDefs } from "./resolvers/dateScalarResolvers";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
