@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
-import Comment from "../models/commentSchema.ts";
-import Movie from "../models/movieSchema.ts";
+import Comment from "../models/commentSchema";
+import Movie from "../models/movieSchema";
 
 export const movieTypeDefs = gql`
     input AwardsInput {
