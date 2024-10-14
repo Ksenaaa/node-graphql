@@ -3,10 +3,11 @@
     "version": "1.0.0",
     "description": "test",
     "type": "module",
-    "main": "index.js",
+    "main": "dist/index.js",
     "scripts": {
         "build": "tsc",
-        "start": "nodemon --exec node --no-warnings=ExperimentalWarning --loader ts-node/esm src/index.ts"
+        "dev": "nodemon --exec node --no-warnings=ExperimentalWarning --loader ts-node/esm src/index.ts",
+        "start": "node --no-warnings=ExperimentalWarning --loader ts-node/esm dist/index.js"
     },
     "author": "",
     "license": "ISC",
