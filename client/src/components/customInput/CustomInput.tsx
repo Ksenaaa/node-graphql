@@ -17,7 +17,7 @@ interface Props {
     value?: string | number;
     label: string;
     placeholder?: string;
-    multiline?: boolean;
+    isMultiline?: boolean;
     onChangeValue?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     errorText?: string;
     field?: FieldValues;
@@ -41,7 +41,7 @@ export const CustomInput = (props: Props) => {
         value,
         label,
         placeholder,
-        multiline,
+        isMultiline,
         onChangeValue,
         errorText,
         field,
@@ -64,13 +64,13 @@ export const CustomInput = (props: Props) => {
                 name={name}
                 type={type}
                 value={value}
-                multiline={multiline}
+                multiline={isMultiline}
                 placeholder={placeholder}
                 onChange={onChangeValue}
                 label={label}
                 select={isSelect}
                 size="small"
-                minRows={multiline ? 2 : 1}
+                rows={isMultiline ? 2 : 1}
                 aria-describedby="error-text"
                 sx={{
                     background: (theme: Theme) =>

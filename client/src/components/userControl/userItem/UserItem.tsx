@@ -8,7 +8,7 @@ import { ButtonIconTooltip } from "components/buttonIconTooltip/ButtonIconToolti
 import { LoaderInBox } from "components/loader/LoaderInBox";
 import { ErrorMessage } from "components/errorMessage/ErrorMessage";
 import { Modal } from "components/modal/Modal";
-import { useToggle } from "utils/helpers/toggleHook";
+import { useToggle } from "utils/helpers/useToggle";
 import { DELETE_USER } from "../graphql/user.mutation";
 import { GET_USERS } from "../graphql/users.query";
 import { User } from "__generated__/graphql";
@@ -40,12 +40,19 @@ export const UserItem = memo(({ user, onChange }: Props) => {
 
     return (
         <>
-            <Paper sx={{ padding: "10px 20px" }} elevation={3}>
+            <Paper
+                sx={{
+                    padding: "10px 20px",
+                    overflow: "hidden",
+                    wordBreak: "break-all",
+                }}
+                elevation={3}
+            >
                 <Stack
                     direction={"row"}
-                    spacing={3}
                     alignItems={"center"}
                     justifyContent={"space-between"}
+                    flexWrap={"wrap"}
                 >
                     <Stack>
                         <Typography variant="body1" fontWeight={"bold"}>
@@ -56,7 +63,12 @@ export const UserItem = memo(({ user, onChange }: Props) => {
                         {error && <ErrorMessage errorMessage={error.message} />}
                     </Stack>
 
-                    <Stack direction={"row"} spacing={3} alignItems={"center"}>
+                    <Stack
+                        direction={"row"}
+                        spacing={3}
+                        alignItems={"center"}
+                        marginLeft={"auto"}
+                    >
                         <ButtonIconTooltip onClick={handleChangeUser}>
                             <PersonPinTwoToneIcon sx={{ fontSize: "30px" }} />
                         </ButtonIconTooltip>

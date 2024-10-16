@@ -63,7 +63,7 @@ export const Modal = ({
                 <Stack
                     direction="column"
                     spacing={2}
-                    sx={{ width: widthModal }}
+                    sx={{ width: widthModal, maxWidth: "100%" }}
                 >
                     {children}
                 </Stack>

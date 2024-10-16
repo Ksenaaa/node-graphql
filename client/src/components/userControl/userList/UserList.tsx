@@ -4,7 +4,7 @@ import { Paper, Stack, Theme } from "@mui/material";
 
 import { LoaderInBox } from "components/loader/LoaderInBox";
 import { ErrorMessage } from "components/errorMessage/ErrorMessage";
-import { useToggle } from "utils/helpers/toggleHook";
+import { useToggle } from "utils/helpers/useToggle";
 import { UserItem } from "../userItem/UserItem";
 import { ControlButtons } from "../controlButtons/ControlButtons";
 import { GET_USERS } from "../graphql/users.query";

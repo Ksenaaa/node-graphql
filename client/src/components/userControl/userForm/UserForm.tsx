@@ -85,7 +85,7 @@ export const UserForm = ({
             <CustomInput
                 name="password"
                 label="password"
-                multiline
+                isMultiline
                 errorText={errors.password?.message}
                 register={register("password")}
             />
