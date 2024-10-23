@@ -10,10 +10,10 @@ import { MovieItem } from "./MovieItem";
 export const MovieList = () => {
     const navigate = useNavigate();
 
-    const { loading, error, data: movies } = useQuery(GET_MOVIE_CARDS);
+    const { loading, error, data: movies, refetch } = useQuery(GET_MOVIE_CARDS);
 
     if (loading) return <LoaderInBox />;
-    if (error) return <ErrorMessage errorMessage={error.message} />;
+    if (error) return <ErrorMessage onClick={refetch} />;
 
     return (
         <>

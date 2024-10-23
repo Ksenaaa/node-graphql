@@ -14,7 +14,7 @@ import { User } from "__generated__/graphql";
 export const UserList = () => {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-    const { loading, error, data: users } = useQuery(GET_USERS);
+    const { loading, error, data: users, refetch } = useQuery(GET_USERS);
 
     const { isOpen: isOpenModalUser, onToggle: onToggleModalUser } =
         useToggle();
@@ -33,7 +33,7 @@ export const UserList = () => {
     );
 
     if (loading) return <LoaderInBox />;
-    if (error) return <ErrorMessage errorMessage={error.message} />;
+    if (error) return <ErrorMessage onClick={refetch} />;
 
     return (
         <>

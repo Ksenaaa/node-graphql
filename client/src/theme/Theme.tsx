@@ -7,7 +7,7 @@ const Theme = ({ children }: PropsWithChildren) => {
         {
             palette: {
                 primary: {
-                    main: "#3da5ae",
+                    main: "#0c545a",
                 },
                 secondary: {
                     main: "#3d7aae",

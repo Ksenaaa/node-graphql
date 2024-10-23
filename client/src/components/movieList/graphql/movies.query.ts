@@ -6,7 +6,7 @@ export const GET_MOVIE_CARDS = gql(`
             id
             year
             title
-            poster
+            posterWebp
             countries
         }
     }

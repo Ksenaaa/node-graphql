@@ -2,6 +2,7 @@ import gql from "graphql-tag";
 
 import Comment from "../models/commentSchema";
 import Movie from "../models/movieSchema";
+import { findOrConvertPosterToWebP } from "../utils/findOrConvertPosterToWebP";
 
 export const movieTypeDefs = gql`
     input AwardsInput {
@@ -80,6 +81,7 @@ export const movieTypeDefs = gql`
         runtime: Int
         cast: [String!]
         poster: String
+        posterWebp: String
         title: String
         fullplot: String
         languages: [String!]
@@ -168,5 +170,12 @@ export const movieResolvers = {
         comments: async ({ id }, args) => {
             return await Comment.find({ movie_id: id }).exec();
         },
+        posterWebp: async ({ poster, id }) => {
+            if (poster) {
+                let posterInWebp = await findOrConvertPosterToWebP(poster, id);
+                return posterInWebp
+            }
+            return ''
+        }
     }
 }
