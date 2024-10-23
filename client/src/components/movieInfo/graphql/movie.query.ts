@@ -9,6 +9,7 @@ export const GET_MOVIE_BY_ID = gql(`
             runtime
             cast
             poster
+            posterWebp
             title
             fullplot
             languages

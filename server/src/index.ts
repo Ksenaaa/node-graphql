@@ -14,6 +14,11 @@ import { commentsResolvers, commentTypeDefs } from "./resolvers/commentResolvers
 import { movieResolvers, movieTypeDefs } from "./resolvers/movieResolvers";
 import { dateScalarResolvers, dateScalarTypeDefs } from "./resolvers/dateScalarResolvers";
 import { AddressInfo } from "net";
+import path from "path";
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename)
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -46,6 +51,7 @@ const server = new ApolloServer({
 app.use(cors())
 // app.use(cors<cors.CorsRequest>(corsOptions))
 app.use(express.json())
+app.use("/images", express.static(path.join(__dirname, "./assets/images")));
 
 await connectDB();
 await server.start();

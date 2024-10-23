@@ -20,7 +20,7 @@ interface Props {
 
 export const UserItem = memo(({ user, onChange }: Props) => {
     const [deleteUser, { loading, error }] = useMutation(DELETE_USER, {
-        errorPolicy: "all",
+        errorPolicy: "none",
         refetchQueries: [GET_USERS, "GetUsers"],
     });
 
@@ -60,7 +60,7 @@ export const UserItem = memo(({ user, onChange }: Props) => {
                         </Typography>
                         <Typography variant="body2">{user.email}</Typography>
 
-                        {error && <ErrorMessage errorMessage={error.message} />}
+                        {error && <ErrorMessage />}
                     </Stack>
 
                     <Stack
