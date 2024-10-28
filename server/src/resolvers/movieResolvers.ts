@@ -2,7 +2,6 @@ import gql from "graphql-tag";
 
 import Comment from "../models/commentSchema";
 import Movie from "../models/movieSchema";
-import { findOrConvertPosterToWebP } from "../utils/findOrConvertPosterToWebP";
 
 export const movieTypeDefs = gql`
     input AwardsInput {
@@ -81,7 +80,6 @@ export const movieTypeDefs = gql`
         runtime: Int
         cast: [String!]
         poster: String
-        posterWebp: String
         title: String
         fullplot: String
         languages: [String!]
@@ -96,11 +94,26 @@ export const movieTypeDefs = gql`
         type: String
         tomatoes: Tomatoes
         comments: [Comment!]
-    }    
+    }  
+        
+    type PageInfo {
+        totalCount: String!
+        endCursor: String!
+        hasNextPage: Boolean!
+    }
+
+    type PaginationResult {
+        edges: NodeResult!
+        pageInfo: PageInfo!
+    }
+        
+    type NodeResult {
+        node: [Movie!]!
+    }
 
     type Query {
         movieById(id: ID!): Movie!
-        movies: [Movie!]!
+        movies(cursor: String, limit: Int, offset: Int): PaginationResult!
     }
 
     type Mutation {
@@ -118,9 +131,22 @@ export const movieResolvers = {
             return movie;
         },
         movies: async (parent, args) => {
-            let results = await Movie.find().limit(175).exec();
+            const { limit = 10, offset = 0 } = args
 
-            return results;
+            let totalCount = (await Movie.countDocuments()).toString()
+            let results = await Movie.find().skip(offset).limit(limit).exec();
+            let findNextPage = await Movie.find().skip(offset + limit).limit(1).exec();
+
+            return {
+                edges: {
+                    node: results
+                },
+                pageInfo: {
+                    totalCount,
+                    endCursor: results[results?.length - 1].id || '',
+                    hasNextPage: !!findNextPage.length
+                }
+            }
         },
     },
     Mutation: {
@@ -170,12 +196,5 @@ export const movieResolvers = {
         comments: async ({ id }, args) => {
             return await Comment.find({ movie_id: id }).exec();
         },
-        posterWebp: async ({ poster, id }) => {
-            if (poster) {
-                let posterInWebp = await findOrConvertPosterToWebP(poster, id);
-                return posterInWebp
-            }
-            return ''
-        }
     }
 }

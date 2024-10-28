@@ -8,10 +8,6 @@ interface Props {
 }
 
 export const MovieImg = ({ movie }: Props) => {
-    const webpImagePath = movie?.posterWebp
-        ? `${process.env.REACT_APP_URL_IMG}/${movie?.posterWebp}`
-        : noImg;
-
     return (
         <Grid
             item
@@ -20,7 +16,7 @@ export const MovieImg = ({ movie }: Props) => {
             sx={{ display: "flex", justifyContent: "center" }}
         >
             <img
-                srcSet={webpImagePath}
+                srcSet={movie?.poster || noImg}
                 width={500}
                 height={700}
                 style={{
@@ -32,6 +28,7 @@ export const MovieImg = ({ movie }: Props) => {
                 }}
                 alt={movie?.title ?? ""}
                 loading="lazy"
+                onError={(e) => (e.currentTarget.srcset = noImg)}
             />
         </Grid>
     );
