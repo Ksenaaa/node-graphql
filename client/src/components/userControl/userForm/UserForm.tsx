@@ -1,33 +1,45 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { CustomInput } from "components/customInput/CustomInput";
 import { Modal } from "components/modal/Modal";
+import { LoaderInBox } from "components/loader/LoaderInBox";
+import { ErrorMessage } from "components/errorMessage/ErrorMessage";
 import { UserSchema } from "./UserSchema";
 import { defaultUserForm } from "./defaultUserForm";
 import { CREATE_USER, UPDATE_USER } from "../graphql/user.mutation";
-import { GET_USERS } from "../graphql/users.query";
-import { User } from "__generated__/graphql";
+import { GET_USER_BY_ID, GET_USERS } from "../graphql/users.query";
 
 interface Props {
-    selectedUser: User | null;
+    selectedUserId: string;
     isOpenModalUser: boolean;
     onCloseModalUser: () => void;
 }
 
 export const UserForm = ({
-    selectedUser,
+    selectedUserId,
     isOpenModalUser,
     onCloseModalUser,
 }: Props) => {
     const {
+        loading,
+        error,
+        data: user,
+        refetch,
+    } = useQuery(GET_USER_BY_ID, {
+        variables: { userById: selectedUserId },
+        skip: !selectedUserId,
+    });
+
+    const {
         handleSubmit,
         register,
         formState: { errors },
+        reset,
     } = useForm<z.infer<typeof UserSchema>>({
-        defaultValues: selectedUser ? selectedUser : defaultUserForm,
         resolver: zodResolver(UserSchema),
     });
 
@@ -40,10 +52,10 @@ export const UserForm = ({
     });
 
     const handleSaveChangesUser = handleSubmit((data) => {
-        if (selectedUser) {
+        if (user) {
             updateUser({
                 variables: {
-                    updateUserId: selectedUser.id,
+                    updateUserId: user.userById.id,
                     updatedDataUser: data,
                 },
             });
@@ -59,17 +71,27 @@ export const UserForm = ({
         onCloseModalUser();
     });
 
+    useEffect(() => {
+        if (user?.userById) {
+            reset({
+                email: user?.userById?.email || defaultUserForm.email,
+                name: user?.userById?.name || defaultUserForm.name,
+                password: user?.userById?.password || defaultUserForm.password,
+            });
+        }
+    }, [user?.userById, reset]);
+
     return (
         <Modal
             titleText={
-                selectedUser
-                    ? `Change user: ${selectedUser?.name}`
-                    : "Create new user"
+                user ? `Change user: ${user?.userById.name}` : "Create new user"
             }
             isOpen={isOpenModalUser}
             onAgree={handleSaveChangesUser}
             onClose={onCloseModalUser}
         >
+            {loading && <LoaderInBox />}
+            {error && <ErrorMessage onClick={refetch} />}
             <CustomInput
                 name="name"
                 label="name"

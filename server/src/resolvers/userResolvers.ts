@@ -20,13 +20,28 @@ export const userTypeDefs = gql`
         id: ID!
         name: String!
         email: String!
-        password: String!
+        password: String
         comments: [Comment!]
     }    
 
+    type PageInfo {
+        totalCount: String!
+        endCursor: String!
+        hasNextPage: Boolean!
+    }
+
+    type PaginationUsersResult {
+        edges: UsersResult!
+        pageInfo: PageInfo!
+    }
+        
+    type UsersResult {
+        node: [User!]!
+    }
+
     type Query {
-        userById(id: ID!): User
-        users: [User!]!
+        userById(id: ID!): User!
+        users(cursor: String, limit: Int, offset: Int): PaginationUsersResult!
     }
 
     type Mutation {
@@ -44,9 +59,22 @@ export const userResolvers = {
             return user;
         },
         users: async (parent, args) => {
-            let results = await User.find().exec();
+            const { limit = 10, offset = 0 } = args
 
-            return results;
+            let totalCount = (await User.countDocuments()).toString()
+            let results = await User.find().skip(offset).limit(limit).exec();
+            let findNextPage = await User.find().skip(offset + limit).limit(1).exec();
+
+            return {
+                edges: {
+                    node: results
+                },
+                pageInfo: {
+                    totalCount,
+                    endCursor: results[results?.length - 1].id || '',
+                    hasNextPage: !!findNextPage.length
+                }
+            }
         },
     },
     Mutation: {

@@ -24,7 +24,7 @@ export const MovieList = () => {
         fetchMore({
             variables: {
                 cursor: data?.movies.pageInfo.endCursor,
-                limit: 3,
+                limit: 10,
                 offset: data?.movies.edges.node.length,
             },
             updateQuery: (prevResult, { fetchMoreResult }) => {

@@ -102,18 +102,18 @@ export const movieTypeDefs = gql`
         hasNextPage: Boolean!
     }
 
-    type PaginationResult {
-        edges: NodeResult!
+    type PaginationMoviesResult {
+        edges: MoviesResult!
         pageInfo: PageInfo!
     }
         
-    type NodeResult {
+    type MoviesResult {
         node: [Movie!]!
     }
 
     type Query {
         movieById(id: ID!): Movie!
-        movies(cursor: String, limit: Int, offset: Int): PaginationResult!
+        movies(cursor: String, limit: Int, offset: Int): PaginationMoviesResult!
     }
 
     type Mutation {
