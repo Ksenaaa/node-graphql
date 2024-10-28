@@ -28,6 +28,7 @@ declare module '@mui/material/styles' {
     interface CustomColorOptions {
         grey: string,
         greyLight: string,
+        greyBlue: string,
         red: string,
         green: string,
         black: string,

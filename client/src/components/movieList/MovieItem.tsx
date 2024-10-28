@@ -21,9 +21,6 @@ export const MovieItem = memo(({ movie, navigate }: Props) => {
     const handleNavigationToItem = () => {
         navigate(movie.id);
     };
-    const webpImagePath = movie?.posterWebp
-        ? `${process.env.REACT_APP_URL_IMG}/${movie?.posterWebp}`
-        : noImg;
 
     return (
         <Card sx={{ width: 350 }}>
@@ -32,10 +29,11 @@ export const MovieItem = memo(({ movie, navigate }: Props) => {
                     component="img"
                     height="450"
                     width={"100%"}
-                    srcSet={webpImagePath}
+                    srcSet={movie?.poster || noImg}
                     sx={{ objectFit: "contain", padding: "12px" }}
                     alt={movie.title || ""}
                     loading="lazy"
+                    onError={(e) => (e.currentTarget.srcset = noImg)}
                 />
                 <CardContent sx={{ padding: "12px" }}>
                     <Typography

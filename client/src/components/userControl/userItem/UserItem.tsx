@@ -45,6 +45,13 @@ export const UserItem = memo(({ user, onChange }: Props) => {
                     padding: "10px 20px",
                     overflow: "hidden",
                     wordBreak: "break-all",
+                    width: "100%",
+                    opacity: 0,
+                    animation: "slideInFromRight 0.5s ease-out forwards",
+                    "@keyframes slideInFromRight": {
+                        "0%": { transform: "translateX(100%)", opacity: 0 },
+                        "100%": { transform: "translateX(0)", opacity: 1 },
+                    },
                 }}
                 elevation={3}
             >

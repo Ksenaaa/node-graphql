@@ -20,6 +20,7 @@ const Theme = ({ children }: PropsWithChildren) => {
                 },
                 colors: {
                     grey: "#969696",
+                    greyBlue: "#a3b6b7",
                     greyLight: "#dcdcdc",
                     red: "#ff6262",
                     green: "#37a78c",
