@@ -10,7 +10,7 @@ import { LoaderInBox } from "components/loader/LoaderInBox";
 import { ErrorMessage } from "components/errorMessage/ErrorMessage";
 import { UserSchema } from "./UserSchema";
 import { defaultUserForm } from "./defaultUserForm";
-import { CREATE_USER, UPDATE_USER } from "../graphql/user.mutation";
+import { REGISTER_USER, UPDATE_USER } from "../graphql/user.mutation";
 import { GET_USER_BY_ID, GET_USERS } from "../graphql/users.query";
 
 interface Props {
@@ -39,15 +39,21 @@ export const UserForm = ({
         register,
         formState: { errors },
         reset,
+        watch,
     } = useForm<z.infer<typeof UserSchema>>({
+        defaultValues: defaultUserForm,
         resolver: zodResolver(UserSchema),
     });
+
+    const watchName = watch("name");
+    const watchEmail = watch("email");
+    const watchPassword = watch("password");
 
     const [updateUser] = useMutation(UPDATE_USER, {
         errorPolicy: "all",
     });
 
-    const [addUser] = useMutation(CREATE_USER, {
+    const [addUser] = useMutation(REGISTER_USER, {
         refetchQueries: [GET_USERS, "GetUsers"],
     });
 
@@ -59,24 +65,25 @@ export const UserForm = ({
                     updatedDataUser: data,
                 },
             });
-
-            onCloseModalUser();
-            return;
         }
 
-        addUser({
-            variables: { dataUser: data },
-        });
+        if (!user) {
+            addUser({
+                variables: { dataUser: data },
+            });
+        }
 
         onCloseModalUser();
     });
 
+    console.log(user);
+
     useEffect(() => {
         if (user?.userById) {
             reset({
-                email: user?.userById?.email || defaultUserForm.email,
-                name: user?.userById?.name || defaultUserForm.name,
-                password: user?.userById?.password || defaultUserForm.password,
+                email: user?.userById?.email || "",
+                name: user?.userById?.name || "",
+                password: user?.userById?.password || "",
             });
         }
     }, [user?.userById, reset]);
@@ -97,12 +104,14 @@ export const UserForm = ({
                 label="name"
                 errorText={errors.name?.message}
                 register={register("name")}
+                inputLabelProps={{ shrink: !!watchName }}
             />
             <CustomInput
                 name="email"
                 label="email"
                 errorText={errors.email?.message}
                 register={register("email")}
+                inputLabelProps={{ shrink: !!watchEmail }}
             />
             <CustomInput
                 name="password"
@@ -110,6 +119,7 @@ export const UserForm = ({
                 isMultiline
                 errorText={errors.password?.message}
                 register={register("password")}
+                inputLabelProps={{ shrink: !!watchPassword }}
             />
         </Modal>
     );

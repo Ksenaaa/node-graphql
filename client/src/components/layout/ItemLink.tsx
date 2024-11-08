@@ -1,5 +1,5 @@
 import { memo, PropsWithChildren } from "react";
-import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import { Link, Location, useMatch, useResolvedPath } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import { ListItemIcon, ListItemText, Theme } from "@mui/material";
 
@@ -7,7 +7,10 @@ import { RouterDirection } from "models/routerDirection";
 
 interface Props {
     onClickItem: () => void;
-    to: RouterDirection;
+    to: {
+        pathname: RouterDirection | string;
+        state?: { background: Location };
+    };
     itemText: string;
 }
 

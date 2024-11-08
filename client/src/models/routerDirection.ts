@@ -4,5 +4,6 @@ export enum RouterDirection {
     USERS_CONTROL = "users-control",
     PROFILE = "profile",
     NOT_FOUND = "*",
-    LOGIN = "login"
+    LOGIN = "login",
+    REGISTER = "register"
 }

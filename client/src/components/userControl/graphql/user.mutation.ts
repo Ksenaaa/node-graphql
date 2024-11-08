@@ -6,9 +6,9 @@ export const DELETE_USER = gql(`
     }
 `);
 
-export const CREATE_USER = gql(`
-    mutation CreateUser($dataUser: CreateUser) {
-        addUser(dataUser: $dataUser) {
+export const REGISTER_USER = gql(`
+    mutation CreateUser($dataUser: CreateDataUser!) {
+        registerUser(dataUser: $dataUser) {
             id
             email
             name

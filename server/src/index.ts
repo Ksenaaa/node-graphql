@@ -37,7 +37,7 @@ const corsOptions = {
 
 const httpServer = http.createServer(app);
 
-const server = new ApolloServer({
+const apolloServer = new ApolloServer({
     typeDefs: [userTypeDefs, commentTypeDefs, movieTypeDefs, dateScalarTypeDefs],
     resolvers: lodash.merge(userResolvers, commentsResolvers, movieResolvers, dateScalarResolvers),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
@@ -48,11 +48,11 @@ app.use(cors())
 app.use(express.json())
 
 await connectDB();
-await server.start();
+await apolloServer.start();
 
 app.use(
     "/graphql",
-    expressMiddleware(server)
+    expressMiddleware(apolloServer)
 );
 
 httpServer.listen(PORT, () => {

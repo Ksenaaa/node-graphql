@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import { Layout } from "components/layout/Layout";
 import { MoviesPage } from "pages/MoviesPage";
@@ -7,8 +7,12 @@ import { ProfilePage } from "pages/ProfilePage";
 import { UserControlPage } from "pages/UserControlPage";
 import { RouterDirection } from "models/routerDirection";
 import { MovieInfoPage } from "pages/MovieInfoPage";
+import { LoginModal } from "pages/LoginModal";
 
 export const RouterApp = () => {
+    let location = useLocation();
+    let background = location.state && location.state.background;
+
     return (
         <Routes>
             <Route path={RouterDirection.LAYOUT} element={<Layout />}>
@@ -29,6 +33,12 @@ export const RouterApp = () => {
                     path={RouterDirection.PROFILE}
                     element={<ProfilePage />}
                 />
+                {background && (
+                    <Route
+                        path={RouterDirection.LOGIN}
+                        element={<LoginModal />}
+                    />
+                )}
                 <Route
                     path={RouterDirection.NOT_FOUND}
                     element={<NotFoundPage />}
