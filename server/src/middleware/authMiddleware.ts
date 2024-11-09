@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 export const authMiddleware = (req, res, next) => {
-    const token = req.header('Bearer: ');
+    const token = req.header('Bearer ');
 
     console.log('token Bearer', token)
 

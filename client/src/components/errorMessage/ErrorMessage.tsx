@@ -1,7 +1,8 @@
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Stack, Theme, Typography } from "@mui/material";
-import { ButtonIconTooltip } from "components/buttonIconTooltip/ButtonIconTooltip";
 import ReplayIcon from "@mui/icons-material/Replay";
+
+import { ButtonIconTooltip } from "components/buttonIconTooltip/ButtonIconTooltip";
 
 interface Props {
     onClick?: () => void;

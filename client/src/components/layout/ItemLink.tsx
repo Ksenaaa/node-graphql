@@ -6,6 +6,7 @@ import { ListItemIcon, ListItemText, Theme } from "@mui/material";
 import { RouterDirection } from "models/routerDirection";
 
 interface Props {
+    isVisible?: boolean;
     onClickItem: () => void;
     to: {
         pathname: RouterDirection | string;
@@ -15,31 +16,49 @@ interface Props {
 }
 
 export const ItemLink = memo(
-    ({ onClickItem, to, itemText, children }: PropsWithChildren<Props>) => {
-        let resolved = useResolvedPath(to);
+    ({
+        isVisible = true,
+        onClickItem,
+        to,
+        itemText,
+        children,
+    }: PropsWithChildren<Props>) => {
+        let resolved = useResolvedPath(to.pathname);
         let isActive = useMatch({ path: resolved.pathname, end: true });
 
         return (
-            <Link style={{ color: "grey", textDecoration: "none" }} to={to}>
-                <MenuItem onClick={onClickItem}>
-                    <ListItemIcon
-                        sx={{
-                            color: (theme: Theme) =>
-                                isActive ? theme.palette.primary.main : "none",
-                        }}
+            <>
+                {isVisible && (
+                    <Link
+                        style={{ color: "grey", textDecoration: "none" }}
+                        to={to.pathname}
+                        state={to.state}
                     >
-                        {children}
-                    </ListItemIcon>
-                    <ListItemText
-                        sx={{
-                            color: (theme: Theme) =>
-                                isActive ? theme.palette.primary.main : "none",
-                        }}
-                    >
-                        {itemText}
-                    </ListItemText>
-                </MenuItem>
-            </Link>
+                        <MenuItem onClick={onClickItem}>
+                            <ListItemIcon
+                                sx={{
+                                    color: (theme: Theme) =>
+                                        isActive
+                                            ? theme.palette.primary.main
+                                            : "none",
+                                }}
+                            >
+                                {children}
+                            </ListItemIcon>
+                            <ListItemText
+                                sx={{
+                                    color: (theme: Theme) =>
+                                        isActive
+                                            ? theme.palette.primary.main
+                                            : "none",
+                                }}
+                            >
+                                {itemText}
+                            </ListItemText>
+                        </MenuItem>
+                    </Link>
+                )}
+            </>
         );
     }
 );

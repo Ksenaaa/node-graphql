@@ -1,52 +1,74 @@
+import { useForm } from "react-hook-form";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { z } from "zod";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Stack, Typography, useTheme } from "@mui/material";
+
+import { FormInput } from "components/form/FormInput";
 import { LOG_IN_USER } from "components/loginForm/graphql/user.mutation";
-import { LoginForm } from "components/loginForm/LoginForm";
 import { LogInUserSchema } from "components/loginForm/LogInUserSchema";
 import { Modal } from "components/modal/Modal";
 import { RouterDirection } from "models/routerDirection";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { useToggle } from "utils/helpers/useToggle";
-import { z } from "zod";
+import useAuthStore from "store/authStore";
 
 export const LoginModal = () => {
-    const { isOpen: isOpenModalLogIn, onToggle: onToggleModalLogIn } =
-        useToggle(true);
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const setUser = useAuthStore((state) => state.setUser);
 
     const theme = useTheme();
+
     const { handleSubmit, control } = useForm<z.infer<typeof LogInUserSchema>>({
         resolver: zodResolver(LogInUserSchema),
     });
 
-    const [login] = useMutation(LOG_IN_USER);
+    const [login] = useMutation(LOG_IN_USER, {
+        onCompleted(data) {
+            setUser(data.login);
+        },
+        onError(error) {
+            console.log(error);
+        },
+    });
 
     const handleLogInUser = handleSubmit((data) => {
-        console.log(data);
-        // login({
-        //     variables: { dataUser: data },
-        // });
+        login({
+            variables: { dataUser: data },
+        });
 
-        // onToggle();
+        nandleCloseModal();
     });
+
+    const nandleCloseModal = () => {
+        navigate(-1);
+    };
 
     return (
         <Modal
             titleText={"Log in"}
-            isOpen={isOpenModalLogIn}
+            isOpen
             onAgree={handleLogInUser}
-            onClose={onToggleModalLogIn}
+            onClose={nandleCloseModal}
             widthModal="300px"
         >
-            {/* {loading && <LoaderInBox />}
-            {error && <ErrorMessage onClick={refetch} />} */}
-            <LoginForm control={control} />
+            <FormInput
+                control={control}
+                fieldName="nameOrEmail"
+                fieldLabel="name or email"
+            />
+            <FormInput
+                control={control}
+                fieldName="password"
+                fieldLabel="password"
+            />
             <Stack sx={{ alignItems: "flex-start" }}>
                 <Typography variant="caption">
-                    {`If you don't have profile: `}
+                    {`If you don't have a profile: `}
                     <Link
-                        to={RouterDirection.REGISTER}
+                        to={`/${RouterDirection.REGISTER}`}
+                        state={{ background: location.state.background }}
                         style={{
                             color: theme.palette.colors.green,
                             textDecoration: "none",

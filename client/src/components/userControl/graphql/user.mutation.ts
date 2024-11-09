@@ -2,7 +2,9 @@ import { gql } from "__generated__/gql";
 
 export const DELETE_USER = gql(`
     mutation DeleteUser($userId: ID!) {
-        deleteUser(id: $userId)
+        deleteUser(id: $userId) {
+            success
+        }
     }
 `);
 
@@ -12,7 +14,6 @@ export const REGISTER_USER = gql(`
             id
             email
             name
-            password
         }
     }
 `);
@@ -23,7 +24,6 @@ export const UPDATE_USER = gql(`
             id
             email
             name
-            password
         }
     }
 `);

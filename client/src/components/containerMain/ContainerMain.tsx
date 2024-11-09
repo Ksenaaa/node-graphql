@@ -13,10 +13,10 @@ export const StyledContainer = styled(Box)(({ theme }) => {
         display: "flex",
         alignItems: "center",
         flexDirection: "column",
-        padding: "94px 35px 30px",
+        padding: "94px 35px 15px",
         overflow: "scroll",
         [theme.breakpoints.down("sm")]: {
-            padding: "80px 8px 30px",
+            padding: "80px 8px 8px",
         },
     };
 });

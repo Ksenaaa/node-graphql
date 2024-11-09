@@ -42,7 +42,7 @@ export const UserItem = memo(({ user, onChange }: Props) => {
         <>
             <Paper
                 sx={{
-                    padding: "10px 20px",
+                    padding: "10px",
                     overflow: "hidden",
                     wordBreak: "break-all",
                     width: "100%",

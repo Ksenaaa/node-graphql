@@ -64,7 +64,7 @@ export const userTypeDefs = gql`
         logout: ResponseIsSuccess!
         registerUser(dataUser: CreateDataUser!): User!
         updateUser(id: ID!, updatedDataUser: UpdateUser!): User
-        deleteUser(id: ID!): Boolean!
+        deleteUser(id: ID!): ResponseIsSuccess!
     }
 `;
 
@@ -152,7 +152,7 @@ export const userResolvers = {
 
                 const password = await bcrypt.hash(dataUser.password, 10)
 
-                const newUser = await User.create({ ...dataUser, password } );
+                const newUser = await User.create({ ...dataUser, password });
 
                 return newUser;
             } catch (error) {
@@ -187,7 +187,7 @@ export const userResolvers = {
 
                 await User.deleteOne({ _id: id })
 
-                return true
+                return { success: true }
             } catch (error) {
                 throw new Error(`User deleting failed: ${error}`);
             }

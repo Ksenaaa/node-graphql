@@ -1,5 +1,5 @@
-import { useQuery } from "@apollo/client";
 import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 import ArrowBackIosTwoToneIcon from "@mui/icons-material/ArrowBackIosTwoTone";
 
 import { LoaderInBox } from "components/loader/LoaderInBox";

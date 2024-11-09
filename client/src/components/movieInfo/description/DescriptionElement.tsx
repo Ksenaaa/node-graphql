@@ -1,7 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 
-import { Movie } from "__generated__/graphql";
 import { DescriptionMovie } from "models/descriptionMovie";
+import { Movie } from "__generated__/graphql";
 
 interface Props {
     descriptionElement: DescriptionMovie;
