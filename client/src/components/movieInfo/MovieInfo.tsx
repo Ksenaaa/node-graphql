@@ -1,10 +1,10 @@
 import { Grid } from "@mui/material";
 
-import { Movie } from "__generated__/graphql";
 import { Description } from "./description/Description";
 import { MovieImg } from "./movieImg/MovieImg";
 import { Popularity } from "./popularity/Popularity";
 import { Plot } from "./plot/Plot";
+import { Movie } from "__generated__/graphql";
 
 interface Props {
     movie?: Movie;

@@ -1,20 +1,44 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 import { Theme, IconButton, Menu } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LogoutTwoToneIcon from "@mui/icons-material/LogoutTwoTone";
 import PersonPinCircleTwoToneIcon from "@mui/icons-material/PersonPinCircleTwoTone";
+import LoginTwoToneIcon from "@mui/icons-material/LoginTwoTone";
 
+import useAuthStore from "store/authStore";
 import { RouterDirection } from "models/routerDirection";
 import { ItemLink } from "./ItemLink";
+import { LOG_OUT_USER } from "./graphql/userLogout.mutation";
 
-export const Profile = () => {
+export const MenuProfile = () => {
+    const isAccessAllow = useAuthStore((state) => state.isAccessAllow);
+    const onLogoutUser = useAuthStore((state) => state.clearAuth);
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const location = useLocation();
+
+    const [logout] = useMutation(LOG_OUT_USER, {
+        onCompleted() {
+            onLogoutUser();
+        },
+        onError(error) {
+            console.log(error);
+        },
+    });
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLogOut = () => {
+        logout();
         setAnchorEl(null);
     };
 
@@ -47,18 +71,31 @@ export const Profile = () => {
                 onClose={handleClose}
             >
                 <ItemLink
+                    isVisible={isAccessAllow}
                     onClickItem={handleClose}
-                    to={RouterDirection.PROFILE}
+                    to={{ pathname: RouterDirection.PROFILE }}
                     itemText="Profile"
                 >
                     <PersonPinCircleTwoToneIcon fontSize="small" />
                 </ItemLink>
                 <ItemLink
-                    onClickItem={handleClose}
-                    to={RouterDirection.LOGIN}
-                    itemText="Exit"
+                    isVisible={isAccessAllow}
+                    onClickItem={handleLogOut}
+                    to={{ pathname: RouterDirection.LAYOUT }}
+                    itemText="Log out"
                 >
                     <LogoutTwoToneIcon fontSize="small" />
+                </ItemLink>
+                <ItemLink
+                    isVisible={!isAccessAllow}
+                    onClickItem={handleClose}
+                    to={{
+                        pathname: RouterDirection.LOGIN,
+                        state: { background: location },
+                    }}
+                    itemText="Log in"
+                >
+                    <LoginTwoToneIcon fontSize="small" />
                 </ItemLink>
             </Menu>
         </>

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useQuery } from "@apollo/client";
 import { Paper, Stack, Theme } from "@mui/material";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 import { LoaderInBox } from "components/loader/LoaderInBox";
 import { ErrorMessage } from "components/errorMessage/ErrorMessage";
@@ -17,7 +17,7 @@ export const UserList = () => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const { loading, error, data, refetch, fetchMore } = useQuery(GET_USERS, {
-        variables: { limit: 5 },
+        variables: { limit: 10 },
     });
 
     const { isOpen: isOpenModalUser, onToggle: onToggleModalUser } =
@@ -40,7 +40,7 @@ export const UserList = () => {
         fetchMore({
             variables: {
                 cursor: data?.users.pageInfo.endCursor,
-                limit: 3,
+                limit: 7,
                 offset: data?.users.edges.node.length,
             },
             updateQuery: (prevResult, { fetchMoreResult }) => {
@@ -64,7 +64,7 @@ export const UserList = () => {
         if (
             scrollContainerRef.current &&
             scrollContainerRef.current.scrollHeight <=
-                scrollContainerRef.current.clientHeight + 300 &&
+                scrollContainerRef.current.clientHeight + 1 &&
             data?.users.pageInfo.hasNextPage
         ) {
             handleFetchMore();
@@ -79,11 +79,10 @@ export const UserList = () => {
             <Paper
                 sx={{
                     width: "700px",
+                    height: "100%",
                     maxWidth: "100%",
                     margin: "0 auto",
-                    padding: "20px 1.2rem",
                     minHeight: "1px",
-                    maxHeight: "100%",
                     overflow: "hidden",
                     background: (theme: Theme) => theme.palette.primary.main,
                 }}
@@ -94,8 +93,9 @@ export const UserList = () => {
                     ref={scrollContainerRef}
                     sx={{
                         padding: "1rem",
-                        maxHeight: "94%",
                         overflow: "scroll",
+                        height: "calc(100% - 5rem)",
+                        margin: "0 1rem",
                         background: (theme: Theme) =>
                             theme.palette.colors.greyBlue,
                     }}
@@ -128,7 +128,6 @@ export const UserList = () => {
             {isOpenModalUser && (
                 <UserForm
                     selectedUserId={selectedUserId}
-                    isOpenModalUser={isOpenModalUser}
                     onCloseModalUser={handleCloseModalUser}
                 />
             )}

@@ -1,7 +1,6 @@
 import { DescriptionMovie } from "models/descriptionMovie";
 import { dateFull } from "utils/helpers/formatDate";
 
-
 export const titleDescription: DescriptionMovie[] = [
     {
         id: 'year',

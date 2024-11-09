@@ -9,7 +9,7 @@ interface Props {
 
 export const ControlButtons = ({ onCreateUser }: Props) => {
     return (
-        <Stack spacing={3} direction={"row"} sx={{ marginBottom: "20px" }}>
+        <Stack spacing={3} direction={"row"} sx={{ padding: "5px 1rem" }}>
             <ButtonIconTooltip onClick={onCreateUser}>
                 <PersonAddAlt1TwoToneIcon
                     sx={{

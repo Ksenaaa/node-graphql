@@ -51,14 +51,14 @@ export const MenuApp = () => {
             >
                 <ItemLink
                     onClickItem={handleClose}
-                    to={RouterDirection.MOVIES}
+                    to={{ pathname: RouterDirection.MOVIES }}
                     itemText="Movies"
                 >
                     <TheatersTwoToneIcon fontSize="small" />
                 </ItemLink>
                 <ItemLink
                     onClickItem={handleClose}
-                    to={RouterDirection.USERS_CONTROL}
+                    to={{ pathname: RouterDirection.USERS_CONTROL }}
                     itemText="Users"
                 >
                     <ManageAccountsTwoToneIcon fontSize="small" />

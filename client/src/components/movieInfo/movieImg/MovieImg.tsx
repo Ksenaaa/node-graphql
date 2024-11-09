@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 
-import { Movie } from "__generated__/graphql";
 import noImg from "assets/img/no-poster-film.png";
+import { Movie } from "__generated__/graphql";
 
 interface Props {
     movie?: Movie;

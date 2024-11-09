@@ -126,34 +126,50 @@ export const movieTypeDefs = gql`
 export const movieResolvers = {
     Query: {
         movieById: async (parent, { id }) => {
-            const movie = await Movie.findById({ _id: id }).exec();
+            try {
+                const movie = await Movie.findById({ _id: id }).exec();
 
-            return movie;
+                if (!movie) {
+                    throw new Error('Movie is not exist!')
+                }
+
+                return movie;
+            } catch (error) {
+                return error
+            }
         },
         movies: async (parent, args) => {
-            const { limit = 10, offset = 0 } = args
+            try {
+                const { limit = 10, offset = 0 } = args
 
-            let totalCount = (await Movie.countDocuments()).toString()
-            let results = await Movie.find().skip(offset).limit(limit).exec();
-            let findNextPage = await Movie.find().skip(offset + limit).limit(1).exec();
+                let totalCount = (await Movie.countDocuments()).toString()
+                let results = await Movie.find().skip(offset).limit(limit).exec();
+                let findNextPage = await Movie.find().skip(offset + limit).limit(1).exec();
 
-            return {
-                edges: {
-                    node: results
-                },
-                pageInfo: {
-                    totalCount,
-                    endCursor: results[results?.length - 1].id || '',
-                    hasNextPage: !!findNextPage.length
+                return {
+                    edges: {
+                        node: results
+                    },
+                    pageInfo: {
+                        totalCount,
+                        endCursor: results[results?.length - 1].id || '',
+                        hasNextPage: !!findNextPage.length
+                    }
                 }
+            } catch (error) {
+                return error
             }
         },
     },
     Mutation: {
         addMovie: async (parent, { dataMovie }) => {
-            const newMovie = await Movie.create(dataMovie)
+            try {
+                const newMovie = await Movie.create(dataMovie)
 
-            return newMovie
+                return newMovie
+            } catch (error) {
+                return error
+            }
         },
         updateMovie: async (parent, { id, updatedDataMovie }) => {
             try {
@@ -163,14 +179,12 @@ export const movieResolvers = {
                     throw new Error('Movie is not exist!')
                 }
 
-                await Movie.updateOne(
+                const updatedMovie = await Movie.updateOne(
                     { _id: id },
                     { $set: updatedDataMovie }
                 )
 
-                const updatedMovie = await Movie.findById({ _id: id }).exec();
-
-                return updatedMovie
+                return updatedMovie.modifiedCount
             } catch (error) {
                 return error
             }
