@@ -83,6 +83,7 @@ export const MovieList = () => {
                     alignContent: "center",
                     justifyContent: "center",
                     gap: "16px",
+                    overflow: "none",
                 }}
                 scrollableTarget="scrollMoviesCard"
             >

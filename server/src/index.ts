@@ -5,7 +5,6 @@ import lodash from "lodash";
 import { AddressInfo } from "net";
 import "dotenv/config";
 import { ApolloServer } from "@apollo/server";
-import { buildSubgraphSchema } from "@apollo/subgraph";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
@@ -14,6 +13,8 @@ import { userResolvers, userTypeDefs } from "./resolvers/userResolvers";
 import { commentsResolvers, commentTypeDefs } from "./resolvers/commentResolvers";
 import { movieResolvers, movieTypeDefs } from "./resolvers/movieResolvers";
 import { dateScalarResolvers, dateScalarTypeDefs } from "./resolvers/dateScalarResolvers";
+import { corsOptions } from "./constants/corsOptions";
+import { apolloFormattedError } from "./constants/apolloFormattedError";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -24,17 +25,19 @@ const apolloServer = new ApolloServer({
     typeDefs: [userTypeDefs, commentTypeDefs, movieTypeDefs, dateScalarTypeDefs],
     resolvers: lodash.merge(userResolvers, commentsResolvers, movieResolvers, dateScalarResolvers),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    formatError: (err) => apolloFormattedError(err)
 });
-
-app.use(cors())
-app.use(express.json())
 
 await connectDB();
 await apolloServer.start();
 
 app.use(
     "/graphql",
-    expressMiddleware(apolloServer)
+    cors<cors.CorsRequest>(corsOptions),
+    express.json(),
+    expressMiddleware(apolloServer, {
+        context: async ({ req }) => req,
+    })
 );
 
 httpServer.listen(PORT, () => {

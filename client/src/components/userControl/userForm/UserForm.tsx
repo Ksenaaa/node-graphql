@@ -42,9 +42,7 @@ export const UserForm = ({ selectedUserId = "", onCloseModalUser }: Props) => {
         resolver: zodResolver(UserSchema),
     });
 
-    const [updateUser] = useMutation(UPDATE_USER, {
-        errorPolicy: "all",
-    });
+    const [updateUser] = useMutation(UPDATE_USER);
 
     const [addUser] = useMutation(REGISTER_USER, {
         refetchQueries: [GET_USERS, "GetUsers"],

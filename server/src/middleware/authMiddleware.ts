@@ -1,19 +1,34 @@
-import jwt from 'jsonwebtoken'
+import { Request } from 'express';
+import { GraphQLError } from 'graphql';
+import jwt from 'jsonwebtoken';
 
-export const authMiddleware = (req, res, next) => {
-    const token = req.header('Bearer ');
+import { ResponseExtension, StatusCode } from '../constants/statusCode';
 
-    console.log('token Bearer', token)
-
-    if (!token) {
-        throw new Error('No token, authorization denied!');
-    }
-
+export const authMiddleware = async (req: Request) => {
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        //req.user = decoded?.user;
-        next();
+        if (!req?.headers?.authorization) {
+            throw new Error("Authentication required!");
+        }
+
+        const authParts = req?.headers?.authorization.split(" ") || '';
+
+        const bearer = authParts[0];
+        const token = authParts[1];
+
+        if (bearer !== "Bearer") {
+            throw new Error("Authentication must use Bearer!");
+        }
+
+        if (!token) {
+            throw new Error("No token provided!");
+        }
+
+        const decodedUser = jwt.verify(token, process.env.JWT_SECRET);
+
+        return decodedUser;
     } catch (err) {
-        throw new Error(`Invalid Token: ${err}`);
+        throw new GraphQLError(`Authentication failed: ${err.message}`, {
+            extensions: ResponseExtension[StatusCode.UNAUTHORIZED],
+        });
     }
 };

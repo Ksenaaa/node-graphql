@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useQuery } from "@apollo/client";
-import { Paper, Stack, Theme } from "@mui/material";
+import { Paper, Stack, Theme, Typography } from "@mui/material";
 
 import { LoaderInBox } from "components/loader/LoaderInBox";
 import { ErrorMessage } from "components/errorMessage/ErrorMessage";
+import useAuthStore from "store/authStore";
 import { useToggle } from "utils/helpers/useToggle";
 import { UserItem } from "../userItem/UserItem";
 import { ControlButtons } from "../controlButtons/ControlButtons";
@@ -13,6 +14,8 @@ import { UserForm } from "../userForm/UserForm";
 import { User } from "__generated__/graphql";
 
 export const UserList = () => {
+    const isAccessAllow = useAuthStore((state) => state.isAccessAllow);
+
     const [selectedUserId, setSelectedUserId] = useState("");
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -36,24 +39,28 @@ export const UserList = () => {
         [onToggleModalUser]
     );
 
-    const handleFetchMore = useCallback(() => {
-        fetchMore({
-            variables: {
-                cursor: data?.users.pageInfo.endCursor,
-                limit: 7,
-                offset: data?.users.edges.node.length,
-            },
-            updateQuery: (prevResult, { fetchMoreResult }) => {
-                if (!fetchMoreResult) return prevResult;
+    const handleFetchMore = useCallback(async () => {
+        try {
+            await fetchMore({
+                variables: {
+                    cursor: data?.users.pageInfo.endCursor,
+                    limit: 7,
+                    offset: data?.users.edges.node.length,
+                },
+                updateQuery: (prevResult, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) return prevResult;
 
-                fetchMoreResult.users.edges.node = [
-                    ...prevResult.users.edges.node,
-                    ...fetchMoreResult.users.edges.node,
-                ];
+                    fetchMoreResult.users.edges.node = [
+                        ...prevResult.users.edges.node,
+                        ...fetchMoreResult.users.edges.node,
+                    ];
 
-                return fetchMoreResult;
-            },
-        });
+                    return fetchMoreResult;
+                },
+            });
+        } catch (error) {
+            return error;
+        }
     }, [
         data?.users.edges.node.length,
         data?.users.pageInfo.endCursor,
@@ -72,6 +79,15 @@ export const UserList = () => {
     }, [data?.users.pageInfo.hasNextPage, handleFetchMore]);
 
     if (loading) return <LoaderInBox />;
+    if (!isAccessAllow)
+        return (
+            <Typography
+                variant="h5"
+                color={(theme: Theme) => theme.palette.colors.red}
+            >
+                No authorized
+            </Typography>
+        );
     if (error) return <ErrorMessage onClick={refetch} />;
 
     return (
@@ -112,6 +128,7 @@ export const UserList = () => {
                             alignContent: "center",
                             justifyContent: "center",
                             gap: "16px",
+                            overflow: "none",
                         }}
                         scrollableTarget="scrollUsersCard"
                     >

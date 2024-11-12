@@ -1,15 +1,31 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import {
+    ApolloClient,
+    ApolloLink,
+    ApolloProvider,
+    InMemoryCache,
+} from "@apollo/client";
 
+import { authLink } from "utils/helpers/authLinkGraphQl";
+import { errorLink } from "utils/helpers/errorLinkGraphQl";
+import { httpLink } from "utils/helpers/httpLinkGraphQl";
 import App from "./App";
 
 import "./index.css";
 
 const client = new ApolloClient({
-    uri: process.env.REACT_APP_BASE_URL ?? "",
+    link: ApolloLink.from([errorLink, authLink, httpLink]),
     cache: new InMemoryCache(),
     connectToDevTools: true,
+    defaultOptions: {
+        mutate: {
+            errorPolicy: "all",
+        },
+        query: {
+            errorPolicy: "all",
+        },
+    },
 });
 
 const root = ReactDOM.createRoot(
