@@ -20,7 +20,6 @@ interface Props {
 
 export const UserItem = memo(({ user, onChange }: Props) => {
     const [deleteUser, { loading, error }] = useMutation(DELETE_USER, {
-        errorPolicy: "none",
         refetchQueries: [GET_USERS, "GetUsers"],
     });
 

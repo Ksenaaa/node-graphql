@@ -7,7 +7,7 @@
     "scripts": {
         "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
         "dev": "nodemon --exec node --no-warnings=ExperimentalWarning --loader ts-node/esm src/index.ts",
-        "start": "node --no-warnings=ExperimentalWarning --loader ts-node/esm dist/index.js"
+        "start": "node --no-warnings=ExperimentalWarning dist/index.js"
     },
     "author": "",
     "license": "ISC",

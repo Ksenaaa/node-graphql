@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { useMutation } from "@apollo/client";
+import { useApolloClient, useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Stack, Typography, useTheme } from "@mui/material";
 
@@ -24,9 +24,12 @@ export const LoginModal = () => {
         resolver: zodResolver(LogInUserSchema),
     });
 
+    const client = useApolloClient();
+
     const [login] = useMutation(LOG_IN_USER, {
         onCompleted(data) {
             setUser(data.login);
+            client.resetStore();
         },
         onError(error) {
             console.log(error);

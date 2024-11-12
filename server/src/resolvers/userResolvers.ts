@@ -1,8 +1,10 @@
 import gql from "graphql-tag";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken'
+
 import Comment from "../models/commentSchema";
 import User from "../models/userSchema";
-import jwt from 'jsonwebtoken'
+import { authMiddleware } from "../middleware/authMiddleware";
 
 export const userTypeDefs = gql`
     type AuthPayload {
@@ -83,8 +85,10 @@ export const userResolvers = {
                 return error
             }
         },
-        users: async (parent, args) => {
+        users: async (parent, args, context) => {
             try {
+                await authMiddleware(context)
+
                 const { limit = 10, offset = 0 } = args
 
                 let totalCount = (await User.countDocuments()).toString()
@@ -125,7 +129,9 @@ export const userResolvers = {
                     throw new Error(`Invalid password!`);
                 }
 
-                const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET)
+                const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+                    expiresIn: process.env.JWT_EXPIRE
+                })
 
                 return {
                     token,
