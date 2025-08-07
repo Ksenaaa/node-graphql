@@ -122,10 +122,12 @@ export const userResolvers = {
                 if (!isMatchPassword) {
                     throw new Error(`Invalid password!`);
                 }
-
-                const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-                    expiresIn: process.env.JWT_EXPIRE
-                })
+                
+                const token = jwt.sign(
+                    { userId: user.id }, 
+                    process.env.JWT_SECRET, 
+                    { expiresIn: '1m'}
+                )
 
                 return {
                     token,
