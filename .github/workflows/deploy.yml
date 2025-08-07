@@ -18,6 +18,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies and build
+        working-directory: ./client
         run: |
           npm install
           npm run build
@@ -27,17 +28,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.REACT_SSH_PRIVATE_KEY }}
 
-      - name: Deploy to Server
+      - name: Sync files to server
         env:
           SERVER_USER: ${{ secrets.SERVER_REACT }}
           SERVER_IP: ${{ secrets.SERVER_REACT_IP }}
           APP_DIR: ${{ secrets.APP_REACT_DIR }}
         run: |
-          # Connect to the server, navigate to the app directory, and copy files
+          rsync -avz --exclude=.git ./client/build/ $SERVER_USER@$SERVER_IP:$APP_DIR
           ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "
-            cd $APP_DIR
-            git pull origin develope
-            npm install
-            npm run build
             pm2 reload all
           "
