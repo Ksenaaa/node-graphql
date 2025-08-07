@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { buildASTSchema, print } from "graphql";
+import { buildASTSchema, printSchema } from "graphql";
 import { gql } from "graphql-tag";
 
 import { userTypeDefs } from "./resolvers/userResolvers";
@@ -16,6 +16,6 @@ const allTypeDefs = gql`
 `;
 
 const schema = buildASTSchema(allTypeDefs);
-const schemaSDL = print(schema);
+const schemaSDL = printSchema(schema);
 
 fs.writeFileSync(path.resolve(__dirname, "../schema.graphql"), schemaSDL);
