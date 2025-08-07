@@ -41,12 +41,6 @@ export const userTypeDefs = gql`
         comments: [Comment!]
     }    
 
-    type PageInfo {
-        totalCount: String!
-        endCursor: String!
-        hasNextPage: Boolean!
-    }
-
     type PaginationUsersResult {
         edges: UsersResult!
         pageInfo: PageInfo!
@@ -56,12 +50,12 @@ export const userTypeDefs = gql`
         node: [User!]!
     }
 
-    type Query {
+    extend type Query {
         userById(id: ID!): User!
         users(cursor: String, limit: Int, offset: Int): PaginationUsersResult!
     }
 
-    type Mutation {
+    extend type Mutation {
         login(dataUser: LoginData!): AuthPayload!
         logout: ResponseIsSuccess!
         registerUser(dataUser: CreateDataUser!): User!

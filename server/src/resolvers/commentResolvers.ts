@@ -4,7 +4,7 @@ import Comment from "../models/commentSchema";
 import User from "../models/userSchema";
 
 export const commentTypeDefs = gql`
-    type Query {
+    extend type Query {
         comments: [Comment!]!
     }
         

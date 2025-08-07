@@ -7,8 +7,10 @@ import { userTypeDefs } from "./resolvers/userResolvers";
 import { commentTypeDefs } from "./resolvers/commentResolvers";
 import { movieTypeDefs } from "./resolvers/movieResolvers";
 import { dateScalarTypeDefs } from "./resolvers/dateScalarResolvers";
+import { baseTypeDefs } from "./resolvers/baseSchema";
 
 const allTypeDefs = gql`
+  ${baseTypeDefs}
   ${userTypeDefs}
   ${commentTypeDefs}
   ${movieTypeDefs}
