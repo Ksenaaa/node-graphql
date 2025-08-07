@@ -15,6 +15,7 @@ import { movieResolvers, movieTypeDefs } from "./resolvers/movieResolvers";
 import { dateScalarResolvers, dateScalarTypeDefs } from "./resolvers/dateScalarResolvers";
 import { corsOptions } from "./constants/corsOptions";
 import { apolloFormattedError } from "./constants/apolloFormattedError";
+import { baseTypeDefs } from "./resolvers/baseSchema";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -22,7 +23,7 @@ const PORT = process.env.PORT || 4000;
 const httpServer = http.createServer(app);
 
 const apolloServer = new ApolloServer({
-    typeDefs: [userTypeDefs, commentTypeDefs, movieTypeDefs, dateScalarTypeDefs],
+    typeDefs: [userTypeDefs, commentTypeDefs, movieTypeDefs, dateScalarTypeDefs, baseTypeDefs],
     resolvers: lodash.merge(userResolvers, commentsResolvers, movieResolvers, dateScalarResolvers),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     formatError: (err) => apolloFormattedError(err)

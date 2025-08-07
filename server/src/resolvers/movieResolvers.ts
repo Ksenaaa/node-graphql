@@ -96,12 +96,6 @@ export const movieTypeDefs = gql`
         comments: [Comment!]
     }  
         
-    type PageInfo {
-        totalCount: String!
-        endCursor: String!
-        hasNextPage: Boolean!
-    }
-
     type PaginationMoviesResult {
         edges: MoviesResult!
         pageInfo: PageInfo!
@@ -111,12 +105,12 @@ export const movieTypeDefs = gql`
         node: [Movie!]!
     }
 
-    type Query {
+    extend type Query {
         movieById(id: ID!): Movie!
         movies(cursor: String, limit: Int, offset: Int): PaginationMoviesResult!
     }
 
-    type Mutation {
+    extend type Mutation {
         addMovie(dataMovie: DataMovie): Movie!
         updateMovie(id: ID!, updatedDataMovie: DataMovie!): Movie
         deleteMovie(id: ID!): Boolean!
