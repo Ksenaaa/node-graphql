@@ -1,0 +1,43 @@
+name: Deploy React App to Ubuntu
+
+on:
+  push:
+    branches:
+      - develope
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      - name: Add SSH private key to agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.REACT_SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Server
+        env:
+          SERVER_USER: ${{ secrets.SERVER_REACT }}
+          SERVER_IP: ${{ secrets.SERVER_REACT_IP }}
+          APP_DIR: ${{ secrets.APP_REACT_DIR }}
+        run: |
+          # Connect to the server, navigate to the app directory, and copy files
+          ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "
+            cd $APP_DIR
+            git pull origin develope
+            npm install
+            npm run build
+            pm2 reload all
+          "
