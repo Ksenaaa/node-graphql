@@ -40,7 +40,7 @@ jobs:
           SERVER_IP: ${{ secrets.SERVER_REACT_IP }}
           APP_DIR: ${{ secrets.APP_REACT_DIR }}
         run: |
-          rsync -avz --exclude=.git ./client/build/ $SERVER_USER@$SERVER_IP:$APP_DIR
-          ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "
+          rsync -avz --exclude=.git -e "ssh -o StrictHostKeyChecking=no" ./client/build/ $SERVER_USER@$SERVER_IP:$APP_DIR
+            ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "
             pm2 reload all
           "
