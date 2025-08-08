@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 import http from "http";
 import lodash from "lodash";
 import { AddressInfo } from "net";
@@ -16,6 +17,7 @@ import { dateScalarResolvers, dateScalarTypeDefs } from "./resolvers/dateScalarR
 import { corsOptions } from "./constants/corsOptions";
 import { apolloFormattedError } from "./constants/apolloFormattedError";
 import { baseTypeDefs } from "./resolvers/baseSchema";
+import { limiter } from "./middleware/rateLimitMiddleware";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -32,8 +34,10 @@ const apolloServer = new ApolloServer({
 await connectDB();
 await apolloServer.start();
 
+app.use(helmet()); 
 app.use(
     "/graphql",
+    limiter, 
     cors<cors.CorsRequest>(corsOptions),
     express.json(),
     expressMiddleware(apolloServer, {
